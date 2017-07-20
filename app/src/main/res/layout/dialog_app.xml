@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="300dp"
+    android:background="@drawable/bg_label"
+    android:orientation="vertical"
+    android:showDividers="middle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="40dp">
+
+        <ImageView
+            android:id="@+id/iv_app_icon"
+            style="@style/ivAppIcon"
+            android:src="@mipmap/ic_app" />
+
+        <TextView
+            android:id="@+id/tv_app_name"
+            style="@style/tvAppName"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_app_package"
+            style="@style/tvAppPackage"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_version"
+        style="@style/itemTextView"
+        android:drawableLeft="@drawable/ic_version" />
+
+    <TextView
+        android:id="@+id/tv_file_length"
+        style="@style/itemTextView"
+        android:drawableLeft="@drawable/ic_file_length" />
+
+    <TextView
+        android:id="@+id/tv_create_date"
+        style="@style/itemTextView"
+        android:drawableLeft="@drawable/ic_install" />
+
+    <TextView
+        android:id="@+id/tv_update_date"
+        style="@style/itemTextView"
+        android:drawableLeft="@drawable/ic_update" />
+
+
+</LinearLayout>

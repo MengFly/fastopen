@@ -14,4 +14,16 @@
     <string name="act_base_setting_is_auto_exit">打开应用后是否自动退出</string>
     <string name="act_base_setting_about_app">关于App</string>
     <string name="copyright_mengfei">CopyRight©MengFei</string>
+    <string name="content_menu">menu</string>
+    <string name="package_default">com.example.mengfly.test</string>
+    <string name="app_name_default">测试的App</string>
+    <string name="content_icon">icon</string>
+    <string name="search">搜索</string>
+    <string name="menu_open_app">打开</string>
+    <string name="menu_share">分享</string>
+    <string name="menu_out">提取app</string>
+    <string name="menu_uninstall">卸载</string>
+    <string name="menu_show_market">在应用商店中查看</string>
+    <string name="menu_top">置顶</string>
+    <string name="menu_un_top">取消置顶</string>
 </resources>

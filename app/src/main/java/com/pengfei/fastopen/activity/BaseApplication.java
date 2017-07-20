@@ -4,6 +4,10 @@ import android.app.Application;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class BaseApplication extends Application {
 
@@ -12,13 +16,20 @@ public class BaseApplication extends Application {
     private static BaseApplication mApp = null;
 
     private List<BaseActivity> mActivityManager;
+    //线程池
+    private ExecutorService threadPoolExecutor;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mActivityManager = new LinkedList<BaseActivity>();
+        mActivityManager = new LinkedList<>();
+        threadPoolExecutor = Executors.newFixedThreadPool(3);
         TAG = this.getClass().getSimpleName();
         mApp = this;
+    }
+
+    public void executeThread(Thread thread) {
+        threadPoolExecutor.submit(thread);
     }
 
     /**

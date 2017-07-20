@@ -2,34 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/menu_main_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/menu_main_search"
-        app:showAsAction="ifRoom" />
 
-    <item
-        android:title="@string/menu_main_show_as"
-        app:icon="@android:drawable/ic_menu_mapmode"
-        app:showAsAction="collapseActionView|withText">
-        <menu>
-            <item
-                android:id="@+id/menu_main_show_as_linear"
-                android:icon="@android:drawable/ic_menu_sort_by_size"
-                android:showAsAction="never|withText"
-                android:title="@string/menu_main_show_as_linear" />
-            <item
-                android:id="@+id/menu_main_show_as_grid"
-                android:icon="@android:drawable/ic_dialog_dialer"
-                android:showAsAction="never|withText"
-                android:title="@string/menu_main_show_as_grid" />
-        </menu>
-    </item>
-
-    <item
-        android:id="@+id/menu_main_setting"
-        android:showAsAction="withText"
-        android:title="@string/menu_main_setting"
-        app:icon="@android:drawable/ic_menu_manage" />
 
 </menu>

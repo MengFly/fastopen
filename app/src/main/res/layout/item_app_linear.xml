@@ -1,54 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/activatedBackgroundIndicator"
-    android:orientation="horizontal"
-    android:padding="5dp">
-    
-    <ImageView
-        android:id="@+id/item_app_icon_iv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_vertical"
-        android:contentDescription="@string/app_name"
-        android:src="@mipmap/ic_launcher" />
+    android:layout_margin="10dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:orientation="vertical">
+        android:background="?selectableItemBackground"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <!--App的icon-->
+        <ImageView
+            android:id="@+id/iv_app_icon"
+            style="@style/ivAppIcon"
+            android:layout_gravity="center_vertical" />
 
-        <TextView
-            android:id="@+id/item_app_title_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/text_white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <include layout="@layout/line_image" />
-
+        <!--App的应用名称以及包名-->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/item_app_last_time_tv" />
+                android:id="@+id/tv_app_name"
+                style="@style/tvAppName" />
 
             <TextView
-                android:id="@+id/item_app_last_time_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_white" />
+                android:id="@+id/tv_app_package"
+                style="@style/tvAppPackage" />
         </LinearLayout>
-    </LinearLayout>
 
-</LinearLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/iv_top"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:scaleType="center"
+                android:src="@drawable/ic_top" />
+
+            <ImageButton
+                android:id="@+id/ib_item_menu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:background="?selectableItemBackground"
+                android:contentDescription="@string/content_menu"
+                android:focusable="false"
+                android:src="@drawable/ic_item_menu" />
+        </FrameLayout>
+
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

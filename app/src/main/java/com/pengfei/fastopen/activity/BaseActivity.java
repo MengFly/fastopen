@@ -4,7 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.widget.Toast;
+
+import com.pengfei.fastopen.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 所有Activity的基类。提供了一些简便的方法来方便调用 在使用这个类的时候，请注意Activity的Theme应该是AppCompat这一系列的主题
@@ -14,6 +21,10 @@ import android.widget.Toast;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog mPro;
+    //是否点击两下退出当前Activity
+    private boolean isPress2Exit = false;
+
+    protected Toolbar toolbar;
 
     /**
      * Activity本身的对象,省的在内部类里面每次都要通过**Activity.this来获取了
@@ -28,7 +39,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         TAG = mContext.getClass().getSimpleName();
         initView(savedInstanceState);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
         BaseApplication.getInstance().addActivity(this);
+    }
+
+    public void setPress2Exit(boolean press2Exit) {
+        isPress2Exit = press2Exit;
     }
 
     /**
@@ -47,7 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param toastStr Toast要显示的内容
      */
-    protected void showToast(String toastStr) {
+    public void showToast(String toastStr) {
         Toast.makeText(mContext, toastStr, Toast.LENGTH_SHORT).show();
     }
 
@@ -57,10 +76,39 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (isPress2Exit)
+                    exit2PressBack();
+                else
+                    super.onKeyDown(keyCode, event);
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean isExit = false;
+
+    //双击退出应用
+    private void exit2PressBack() {
+        if (!isExit) {
+            showToast("再按一次退出应用");
+            isExit = true;
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false;
+                }
+            }, 2000);
+        } else {
+            BaseApplication.getInstance().exit();
+        }
+    }
+
     /**
      * 获取TAG
-     *
-     * @return
      */
     protected String getTAG() {
         return this.getClass().getSimpleName();
@@ -70,8 +118,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 显示一个提示等待框
      *
      * @param logoRes 等待框要显示的logo，如果为0那么就不显示
-     * @param title
-     * @param message
      */
     public void showProDialog(int logoRes, String title, String message) {
         if (mPro == null) {

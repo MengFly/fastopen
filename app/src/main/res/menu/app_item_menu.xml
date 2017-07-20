@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_open_app"
+        android:title="@string/menu_open_app" />
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/menu_share" />
+    <item
+        android:id="@+id/menu_uninstall"
+        android:title="@string/menu_uninstall" />
+    <item
+        android:id="@+id/menu_top"
+        android:title="@string/menu_top" />
+    <item
+        android:id="@+id/menu_out"
+        android:title="@string/menu_out" />
+    <item
+        android:id="@+id/menu_show_market"
+        android:title="@string/menu_show_market" />
+
+</menu>

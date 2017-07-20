@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string-array name="main_item_long_click">
-        <item>分享App</item>
-        <item>App详细信息</item>
+    <string-array name="app_style">
+        <item>用户应用</item>
+        <item>系统应用</item>
+        <item>全部应用</item>
+        <item>可打开应用</item>
+        <item>不可打开应用</item>
+        <item>查看导出apk</item>
+        <item>应用设置</item>
     </string-array>
 </resources>

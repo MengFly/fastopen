@@ -13,8 +13,7 @@
         android:textSize="12sp"
         android:drawableTop="@mipmap/ic_app"
         android:gravity="center"
-        android:text="@string/about_app_tv"
-        android:textColor="@color/text_white" />
+        android:text="@string/about_app_tv" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,7 +1,7 @@
 package com.pengfei.fastopen;
 
 import com.pengfei.fastopen.activity.BaseApplication;
-import com.pengfei.fastopen.dao.AppManager;
+import com.pengfei.fastopen.utils.AppManager;
 import com.pengfei.fastopen.entity.AppBean;
 
 import org.junit.Test;
