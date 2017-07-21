@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -18,11 +17,13 @@ import android.widget.TextView;
 
 import com.pengfei.fastopen.R;
 import com.pengfei.fastopen.adapter.AppsAdapter;
+import com.pengfei.fastopen.adapter.SpinnerAdapter;
 import com.pengfei.fastopen.dialog.AppBeanDialog;
 import com.pengfei.fastopen.entity.AppBean;
 import com.pengfei.fastopen.thread.GetAppThread;
 import com.pengfei.fastopen.utils.AppManager;
 import com.pengfei.fastopen.utils.ClipbordUtils;
+import com.pengfei.fastopen.utils.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity implements
 
     private ListView totalAppsLV;//所有的App(线性布局)
     private TextView appCount;
+    private View headView;
 
     private List<AppBean> totalApps;//所有的App的数据
     private List<AppBean> showApps;//用于显示的App数据
@@ -44,7 +46,6 @@ public class MainActivity extends BaseActivity implements
     SearchView searchView;
     //用于选择进行筛选的App的类型
     private AppCompatSpinner appStyle;
-    private CardView headCardView;
 
     int lastPress = 0;
 
@@ -54,7 +55,6 @@ public class MainActivity extends BaseActivity implements
         totalAppsLV = (ListView) findViewById(R.id.lv_apps);
         searchView = (SearchView) findViewById(R.id.sv_);
         appStyle = (AppCompatSpinner) findViewById(R.id.as_app_style);
-        headCardView = (CardView) findViewById(R.id.cardView);
         initListView();
         setPress2Exit(true);
         initDatas();
@@ -63,14 +63,9 @@ public class MainActivity extends BaseActivity implements
 
     private void initListView() {
         appCount = (TextView) getLayoutInflater().inflate(R.layout.item_bottom, null, false);
-        View headView = getLayoutInflater().inflate(R.layout.top_header, null, false);
+        headView = getLayoutInflater().inflate(R.layout.top_header, null, false);
         totalAppsLV.addHeaderView(headView);
         totalAppsLV.addFooterView(appCount);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     private void initListener() {
@@ -86,6 +81,7 @@ public class MainActivity extends BaseActivity implements
         showApps = new ArrayList<>();
         appAdapter = new AppsAdapter(mContext, showApps, R.layout.item_app_linear);
         totalAppsLV.setAdapter(appAdapter);
+        appStyle.setAdapter(new SpinnerAdapter(mContext));
         GetAppThread thread = new GetAppThread(new GetAppThread.CallBack() {
             @Override
             public void onCallback(List<AppBean> beanList) {
@@ -110,8 +106,8 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void hideSearchView() {
-        if (headCardView.getAlpha() == 1.0f) {
-            ObjectAnimator animation = ObjectAnimator.ofFloat(headCardView, "alpha", 1.0f, 0.0f);
+        if (searchView.getAlpha() == 1.0f) {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "alpha", 1.0f, 0.0f);
             animation.setInterpolator(new AccelerateInterpolator());
             animation.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -121,7 +117,8 @@ public class MainActivity extends BaseActivity implements
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    headCardView.setVisibility(View.GONE);
+                    searchView.setVisibility(View.INVISIBLE);
+                    headView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -140,13 +137,14 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void showSearchView() {
-        if (headCardView.getAlpha() == 0.0f) {
-            ObjectAnimator animation = ObjectAnimator.ofFloat(headCardView, "alpha", 0.0f, 1.0f);
+        if (searchView.getAlpha() == 0.0f) {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "alpha", 0.0f, 1.0f);
             animation.setDuration(1000);
             animation.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    headCardView.setVisibility(View.VISIBLE);
+                    searchView.setVisibility(View.VISIBLE);
+                    headView.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
@@ -208,6 +206,22 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onRestart() {
+        if (appStyle != null && appStyle.getSelectedItemPosition() > 4) {
+            appStyle.setSelection(0);
+        }
+        super.onRestart();
+    }
+
+    public void sortApps() {
+        if (appAdapter != null) {
+            Collections.sort(showApps);
+            appAdapter.notifyDataSetChanged();
+        }
+    }
+
+    //====================================== 这里是listener的重写方法
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position < 1 || position > showApps.size()) {
             return;
@@ -218,7 +232,9 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        ClipbordUtils.setClipBordText(showApps.get(position).getAppName());
+        int select = position - 1;
+        if (select < 0 || select >= showApps.size()) return true;
+        ClipbordUtils.setClipBordText(showApps.get(select).getAppName());
         showToast("App 名称已经复制");
         return true;
     }
@@ -228,18 +244,13 @@ public class MainActivity extends BaseActivity implements
         if (position <= 4) {
             refreshAppList(totalApps, true);
         } else {
+            //应用设置
             if (position == 6) {
                 startActivity(new Intent(mContext, AboutAppActivity.class));
+            } else if (position == 5) {// 查看导出的应用
+                DialogUtils.getExtraAppsDialog(mContext).show();
             }
         }
-    }
-
-    @Override
-    protected void onRestart() {
-        if (appStyle != null && appStyle.getSelectedItemPosition() > 4) {
-            appStyle.setSelection(0);
-        }
-        super.onRestart();
     }
 
     @Override
@@ -289,13 +300,6 @@ public class MainActivity extends BaseActivity implements
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (firstVisibleItem == 1) {
             showSearchView();
-        }
-    }
-
-    public void sortApps() {
-        if (appAdapter != null) {
-            Collections.sort(showApps);
-            appAdapter.notifyDataSetChanged();
         }
     }
 }

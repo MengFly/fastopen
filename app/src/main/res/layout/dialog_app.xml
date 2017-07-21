@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="300dp"
     android:background="@drawable/bg_label"
+    android:minWidth="300dp"
     android:orientation="vertical"
-    android:showDividers="middle">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,25 +31,12 @@
             android:gravity="center" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_version"
-        style="@style/itemTextView"
-        android:drawableLeft="@drawable/ic_version" />
 
-    <TextView
-        android:id="@+id/tv_file_length"
-        style="@style/itemTextView"
-        android:drawableLeft="@drawable/ic_file_length" />
-
-    <TextView
-        android:id="@+id/tv_create_date"
-        style="@style/itemTextView"
-        android:drawableLeft="@drawable/ic_install" />
-
-    <TextView
-        android:id="@+id/tv_update_date"
-        style="@style/itemTextView"
-        android:drawableLeft="@drawable/ic_update" />
-
+    <ExpandableListView
+        android:id="@+id/elv_app_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/none"
+        android:scrollbars="none" />
 
 </LinearLayout>

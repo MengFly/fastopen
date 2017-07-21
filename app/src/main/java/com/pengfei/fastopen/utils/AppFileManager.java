@@ -2,7 +2,6 @@ package com.pengfei.fastopen.utils;
 
 import android.os.Environment;
 
-import com.pengfei.fastopen.activity.BaseApplication;
 import com.pengfei.fastopen.entity.AppBean;
 
 import java.io.File;
@@ -13,7 +12,8 @@ import java.io.File;
  */
 public class AppFileManager {
 
-    public static File getLocalAppDir() {
+    //获取到导出的应用位置
+    public static File getExtraAppDir() {
         File downLoadFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File localAppDir = new File(downLoadFile, "mengfly-app-local");
         if (!localAppDir.exists()) {
@@ -23,7 +23,7 @@ public class AppFileManager {
     }
 
     public static File getAppFileName(AppBean bean) {
-        File file = new File(getLocalAppDir(), bean.getAppName() + bean.getVersionName() + ".apk");
+        File file = new File(getExtraAppDir(), bean.getAppName() + bean.getVersionName() + ".apk");
         if (file.exists()) {
             return null;
         }

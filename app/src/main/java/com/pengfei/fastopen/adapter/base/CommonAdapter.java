@@ -18,12 +18,12 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
 
     protected List<T> mList;
 
-    private int mItemLayoutResorce;
+    private int mItemLayoutResource;
 
-    public CommonAdapter(Context montext, List<T> mList, int mItemLayoutResorce) {
-        this.mContext = montext;
+    public CommonAdapter(Context mContext, List<T> mList, int mItemLayoutResource) {
+        this.mContext = mContext;
         this.mList = mList;
-        this.mItemLayoutResorce = mItemLayoutResorce;
+        this.mItemLayoutResource = mItemLayoutResource;
     }
 
     @Override
@@ -44,7 +44,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = ViewHolder.getHolder(mContext, position,
-                convertView, parent, mItemLayoutResorce);
+                convertView, parent, mItemLayoutResource);
 
         bindItemDatas(holder, mList.get(position));
 

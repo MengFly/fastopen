@@ -17,6 +17,10 @@ public class AppManager {
 
     private static final String TAG = "AppManager";
 
+    public static PackageManager getPackageManager() {
+        return BaseApplication.getInstance().getPackageManager();
+    }
+
     public static List<PackageInfo> getPackages() {
         PackageManager packageManager = BaseApplication.getInstance().getPackageManager();
         return packageManager.getInstalledPackages(0);

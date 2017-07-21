@@ -26,4 +26,7 @@
     <string name="menu_show_market">在应用商店中查看</string>
     <string name="menu_top">置顶</string>
     <string name="menu_un_top">取消置顶</string>
+    <string name="menu_show_system">在系统中查看</string>
+    <string name="menu_show">查看</string>
+    <string name="press_down">向下滑动显示搜索框</string>
 </resources>

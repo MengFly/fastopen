@@ -38,7 +38,7 @@ public class FileUtils {
     }
 
     private static void doCopyFile(File srcFile, File destFile) throws IOException {
-        if(destFile.exists() && destFile.isDirectory()) {
+        if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("目标文件 \'" + destFile + "\' 不能是文件夹");
         } else {
             FileInputStream fis = null;
@@ -54,17 +54,21 @@ public class FileUtils {
                 long size = input.size();
                 long pos = 0L;
 
-                for(long count = 0L; pos < size; pos += output.transferFrom(input, pos, count)) {
-                    count = size - pos > 31457280L?31457280L:size - pos;
+                for (long count = 0L; pos < size; pos += output.transferFrom(input, pos, count)) {
+                    count = size - pos > 31457280L ? 31457280L : size - pos;
                 }
             } finally {
                 closeStream(output, fos, input, fis);
             }
 
-            if(srcFile.length() != destFile.length()) {
+            if (srcFile.length() != destFile.length()) {
                 throw new IOException("Failed to copy full contents from \'" + srcFile + "\' to \'" + destFile + "\'");
             }
         }
+    }
+
+    public static boolean deleteFile(File file) {
+        return file.delete();
     }
 
     private static void closeStream(Closeable... closeables) {

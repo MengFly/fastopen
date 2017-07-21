@@ -4,14 +4,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.graphics.drawable.Drawable;
 
+import com.pengfei.fastopen.activity.BaseApplication;
+import com.pengfei.fastopen.utils.AppManager;
 import com.pengfei.fastopen.utils.DateTool;
 import com.pengfei.fastopen.utils.SPUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
-public class AppBean implements Comparable<AppBean>{
+public class AppBean implements Comparable<AppBean> {
     private static final String TOP_SP = "top_sp";
 
     private PackageInfo appInfo;
@@ -113,6 +120,26 @@ public class AppBean implements Comparable<AppBean>{
         return ((appInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
     }
 
+    public List<String> requestPermission() {
+        PackageInfo permissionInfo;
+        try {
+            permissionInfo = AppManager.getPackageManager().getPackageInfo(
+                    getPackageName(), PackageManager.GET_PERMISSIONS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+        String[] permissions = permissionInfo.requestedPermissions;
+        if (permissions == null) {
+            return Collections.emptyList();
+        }
+        List<String> permissionsList = new ArrayList<>(permissions.length);
+        for (String permission : permissions) {
+            permissionsList.add(permission);
+        }
+        return permissionsList;
+    }
+
     @Override
     public int compareTo(AppBean another) {
         if (isTop()) {
@@ -120,7 +147,6 @@ public class AppBean implements Comparable<AppBean>{
         }
         if (another.isTop()) {
             return 1;
-        }
-        else return 0;
+        } else return 0;
     }
 }

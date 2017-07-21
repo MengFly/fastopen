@@ -1,12 +1,12 @@
 package com.pengfei.fastopen.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.pengfei.fastopen.R;
@@ -16,7 +16,7 @@ import com.pengfei.fastopen.activity.MainActivity;
 import com.pengfei.fastopen.adapter.base.CommonAdapter;
 import com.pengfei.fastopen.adapter.base.ViewHolder;
 import com.pengfei.fastopen.thread.CopyAppToLocalThread;
-import com.pengfei.fastopen.utils.ShareTool;
+import com.pengfei.fastopen.utils.IntentUtils;
 import com.pengfei.fastopen.entity.AppBean;
 
 import java.io.File;
@@ -53,16 +53,19 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
                                 mContext.startActivity(bean.getStartIntent());
                                 return true;
                             case R.id.menu_share:
-                                ShareTool.shareFile(mContext, new File(bean.getAppFileDir()), "分享 " + bean.getAppName());
+                                IntentUtils.shareFile(mContext, new File(bean.getAppFileDir()), "分享 " + bean.getAppName());
                                 return true;
                             case R.id.menu_out:
                                 doOutApp(bean);
                                 return true;
                             case R.id.menu_uninstall:
-                                ShareTool.uninstallApp(mContext, bean.getPackageName());
+                                IntentUtils.uninstallApp(mContext, bean.getPackageName());
                                 return true;
                             case R.id.menu_show_market:
-                                ShareTool.openApplicationMarket(mContext, bean.getPackageName());
+                                IntentUtils.openApplicationMarket(mContext, bean.getPackageName());
+                                return true;
+                            case R.id.menu_show_system:
+                                IntentUtils.openSystemApp(mContext, bean.getPackageName());
                                 return true;
                             case R.id.menu_top:
                                 if (item.getTitle().equals(mContext.getText(R.string.menu_top))) {

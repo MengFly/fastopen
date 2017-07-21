@@ -24,8 +24,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     //是否点击两下退出当前Activity
     private boolean isPress2Exit = false;
 
-    protected Toolbar toolbar;
-
     /**
      * Activity本身的对象,省的在内部类里面每次都要通过**Activity.this来获取了
      */
@@ -39,10 +37,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         TAG = mContext.getClass().getSimpleName();
         initView(savedInstanceState);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
         BaseApplication.getInstance().addActivity(this);
     }
 
@@ -105,13 +99,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             BaseApplication.getInstance().exit();
         }
-    }
-
-    /**
-     * 获取TAG
-     */
-    protected String getTAG() {
-        return this.getClass().getSimpleName();
     }
 
     /**
