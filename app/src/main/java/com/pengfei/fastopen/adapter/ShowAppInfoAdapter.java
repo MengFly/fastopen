@@ -1,10 +1,7 @@
 package com.pengfei.fastopen.adapter;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +11,6 @@ import android.widget.TextView;
 import com.pengfei.fastopen.R;
 
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * 用于显示app信息的ListAdapter
@@ -74,9 +69,9 @@ public class ShowAppInfoAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         ParentItem item = parentItems.get(groupPosition);
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_app_info_parent, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_dialog_item, parent, false);
         }
-        TextView tv = (TextView) convertView.findViewById(R.id.tv_app_parent);
+        TextView tv = (TextView) convertView.findViewById(R.id.tv_item);
         tv.setText(item.showMsg);
         Drawable drawable = context.getResources().getDrawable(item.msgIcon);
         drawable.setBounds(0, 0, 32, 32);
@@ -87,9 +82,9 @@ public class ShowAppInfoAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_app_child, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_dialog_item_child, parent, false);
         }
-        TextView tv = (TextView) convertView.findViewById(R.id.tv_app_child);
+        TextView tv = (TextView) convertView.findViewById(R.id.tv_item_child);
         tv.setText(parentItems.get(groupPosition).childs.get(childPosition));
         return convertView;
     }

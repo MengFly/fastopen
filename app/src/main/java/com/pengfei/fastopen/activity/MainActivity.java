@@ -169,9 +169,6 @@ public class MainActivity extends BaseActivity implements
 
     //刷新显示的App
     private void refreshAppList(List<AppBean> beanList, boolean isClear) {
-        if (appStyle.getSelectedItemPosition() > 4) {
-            return;
-        }
         if (isClear) {
             showApps.clear();
         }
@@ -188,8 +185,8 @@ public class MainActivity extends BaseActivity implements
             } else if (appStyle.getSelectedItemPosition() == 3 && bean.getStartIntent() != null) {
                 //可打开的应用
                 showApps.add(bean);
-            } else if (appStyle.getSelectedItemPosition() == 4 && bean.getStartIntent() == null) {
-                //不可打开的应用
+            } else if (appStyle.getSelectedItemPosition() == 4 && bean.isCanUninstall()) {
+                //可卸载的应用
                 showApps.add(bean);
             }
         }
@@ -245,17 +242,14 @@ public class MainActivity extends BaseActivity implements
             refreshAppList(totalApps, true);
         } else {
             //应用设置
-            if (position == 6) {
-                startActivity(new Intent(mContext, AboutAppActivity.class));
-            } else if (position == 5) {// 查看导出的应用
-                DialogUtils.getExtraAppsDialog(mContext).show();
+            if (position == 5) {
+                startActivity(new Intent(mContext, SettingsActivity.class));
             }
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override

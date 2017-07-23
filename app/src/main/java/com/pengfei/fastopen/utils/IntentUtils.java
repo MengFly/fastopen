@@ -98,4 +98,11 @@ public class IntentUtils {
         return list.size() > 0;
     }
 
+    public static void openBrowser(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        checkAndStartIntent(context, intent, "选择浏览器");
+
+    }
+
 }

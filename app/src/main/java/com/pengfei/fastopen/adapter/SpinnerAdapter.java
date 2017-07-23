@@ -46,11 +46,8 @@ public class SpinnerAdapter extends CommonAdapter<SpinnerEntity> {
         SpinnerEntity canOpenApp = new SpinnerEntity("可打开应用", R.drawable.ic_open);
         spinnerList.add(canOpenApp);
 
-        SpinnerEntity notOpenApp = new SpinnerEntity("不可打开应用", R.drawable.ic_not);
+        SpinnerEntity notOpenApp = new SpinnerEntity("可卸载应用", R.drawable.ic_not);
         spinnerList.add(notOpenApp);
-
-        SpinnerEntity showExtra = new SpinnerEntity("查看导出apk", R.drawable.ic_extra_doc);
-        spinnerList.add(showExtra);
 
         SpinnerEntity appSettings = new SpinnerEntity("应用设置", R.drawable.ic_settings);
         spinnerList.add(appSettings);

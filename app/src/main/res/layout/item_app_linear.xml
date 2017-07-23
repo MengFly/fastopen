@@ -20,6 +20,10 @@
             style="@style/ivAppIcon"
             android:layout_gravity="center_vertical" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <!--App的应用名称以及包名-->
         <LinearLayout
             android:layout_width="0dp"

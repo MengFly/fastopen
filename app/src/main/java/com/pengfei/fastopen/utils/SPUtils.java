@@ -15,13 +15,7 @@ import java.util.Map;
  */
 public class SPUtils {
 
-    public static final String N_MUSIC_SELECT_POSITION = "select_position";
     public static final String N_APP_CONFIG = "config";
-
-
-    public static final String KEY_DAY_NIGHT = "day_night";
-    public static final String KEY_INT = "int_";
-
     private static SharedPreferences getSPF(String name) {
         return BaseApplication.getInstance().getSharedPreferences(name, Context.MODE_PRIVATE);
     }

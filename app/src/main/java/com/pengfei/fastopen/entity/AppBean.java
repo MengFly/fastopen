@@ -1,20 +1,15 @@
 package com.pengfei.fastopen.entity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PermissionInfo;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
-import com.pengfei.fastopen.activity.BaseApplication;
 import com.pengfei.fastopen.utils.AppManager;
 import com.pengfei.fastopen.utils.DateTool;
 import com.pengfei.fastopen.utils.SPUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -28,11 +23,7 @@ public class AppBean implements Comparable<AppBean> {
     private Drawable appIcon;//（App的Icon）
     private Intent startIntent;//获取启动的intent
     private Date firstInstallTime;//第一次安装时间
-
     private Date lastUpdateTime;//最后更新时间
-
-    public AppBean() {
-    }
 
     public AppBean(PackageInfo appInfo) {
         this.appInfo = appInfo;
@@ -58,15 +49,7 @@ public class AppBean implements Comparable<AppBean> {
         return appInfo.applicationInfo.sourceDir;
     }
 
-    private Date getLastOpenTime(SharedPreferences spf, String appName) {
-        long time = spf.getLong(appName, -1);
-        if (time == -1) {
-            return null;
-        } else {
-            return new Date(time);
-        }
-    }
-
+    // 第一次安装时间
     public String getFirstInstallTime() {
         if (firstInstallTime != null) {
             return DateTool.getDateStr(firstInstallTime);
@@ -75,6 +58,7 @@ public class AppBean implements Comparable<AppBean> {
         }
     }
 
+    // 最后一次安装时间
     public String getLastUpdateTime() {
         if (firstInstallTime != null) {
             return DateTool.getDateStr(lastUpdateTime);
@@ -88,65 +72,89 @@ public class AppBean implements Comparable<AppBean> {
         return (boolean) SPUtils.get(TOP_SP, appName, false);
     }
 
+    //设置是否置顶
     public void setIsTop(boolean isTop) {
         SPUtils.put(TOP_SP, appName, isTop);
     }
 
+    //获取App名称
     public String getAppName() {
         return appName;
     }
 
+    //设置APP的显示Icon
     public void setAppIcon(Drawable appIcon) {
         this.appIcon = appIcon;
     }
 
+    //设置App的名称
     public void setAppName(String appName) {
         this.appName = appName;
     }
 
+    // 设置启动App的Intent
     public void setStartIntent(Intent startIntent) {
         this.startIntent = startIntent;
     }
 
+    // 获取App的Package
     public String getPackageName() {
         return appInfo.packageName;
     }
 
+    // 获取App版本号
     public String getVersionName() {
         return appInfo.versionName;
     }
 
+    // 返回是否为系统应用
     public boolean isSystem() {
         return ((appInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
     }
 
+    //是否可以被卸载
+    // 如果不是系统应用或者是如果之后被更新过，那么这个应用就可以被卸载
+    public boolean isCanUninstall() {
+        return !isSystem() || !getFirstInstallTime().equals(getLastUpdateTime());
+    }
+
+    //是否是新安装的应用
+    public boolean isNewInstall() {
+        //如果第一次安装时间在1天之内
+        return ((System.currentTimeMillis() - firstInstallTime.getTime()) / 1000 - 60 * 60 * 24) < 0;
+    }
+
+    //是否新更新的应用
+    public boolean isNewUpdate() {
+        //如果第一次安装时间在1天之内
+        return ((System.currentTimeMillis() - lastUpdateTime.getTime()) / 1000 - 60 * 60 * 24) < 0;
+    }
+
+    // 获取App的权限
     public List<String> requestPermission() {
-        PackageInfo permissionInfo;
-        try {
-            permissionInfo = AppManager.getPackageManager().getPackageInfo(
-                    getPackageName(), PackageManager.GET_PERMISSIONS);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
-        String[] permissions = permissionInfo.requestedPermissions;
-        if (permissions == null) {
-            return Collections.emptyList();
-        }
-        List<String> permissionsList = new ArrayList<>(permissions.length);
-        for (String permission : permissions) {
-            permissionsList.add(permission);
-        }
-        return permissionsList;
+        return AppManager.requestPermission(getPackageName());
     }
 
     @Override
-    public int compareTo(AppBean another) {
+    public int compareTo(@NonNull AppBean another) {
         if (isTop()) {
             return -1;
         }
         if (another.isTop()) {
             return 1;
-        } else return 0;
+        }
+        if (isNewInstall()) {
+            return -1;
+        }
+        if (isNewUpdate()) {
+            return -1;
+        }
+        if (another.isNewInstall()) {
+            return 1;
+        }
+        if (another.isNewUpdate()) {
+            return 1;
+        }
+        return 0;
     }
 }

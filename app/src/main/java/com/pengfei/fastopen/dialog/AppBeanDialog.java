@@ -3,11 +3,13 @@ package com.pengfei.fastopen.dialog;
 import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.support.v7.app.AppCompatDialog;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pengfei.fastopen.R;
+import com.pengfei.fastopen.activity.MainActivity;
 import com.pengfei.fastopen.adapter.ShowAppInfoAdapter;
 import com.pengfei.fastopen.entity.AppBean;
 
@@ -29,11 +31,18 @@ public class AppBeanDialog extends AppCompatDialog {
         initView(bean);
     }
 
-    private void initView(AppBean bean) {
+    private void initView(final AppBean bean) {
         setContentView(R.layout.dialog_app);
         ((ImageView) findViewById(R.id.iv_app_icon)).setImageDrawable(bean.getAppIcon());
         ((TextView) findViewById(R.id.tv_app_name)).setText(bean.getAppName());
         ((TextView) findViewById(R.id.tv_app_package)).setText(bean.getPackageName());
+        findViewById(R.id.tv_open).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getContext().startActivity(bean.getStartIntent());
+            }
+        });
+        findViewById(R.id.tv_open).setVisibility(bean.getStartIntent() == null ? View.GONE : View.VISIBLE);
         appELV = ((ExpandableListView) findViewById(R.id.elv_app_info));
         appELV.setGroupIndicator(null);
         appELV.setAdapter(new ShowAppInfoAdapter(getContext(), getShowList(bean)));

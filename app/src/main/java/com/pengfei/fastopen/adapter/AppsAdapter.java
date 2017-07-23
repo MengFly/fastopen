@@ -2,6 +2,10 @@ package com.pengfei.fastopen.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,9 +19,9 @@ import com.pengfei.fastopen.activity.BaseApplication;
 import com.pengfei.fastopen.activity.MainActivity;
 import com.pengfei.fastopen.adapter.base.CommonAdapter;
 import com.pengfei.fastopen.adapter.base.ViewHolder;
+import com.pengfei.fastopen.entity.AppBean;
 import com.pengfei.fastopen.thread.CopyAppToLocalThread;
 import com.pengfei.fastopen.utils.IntentUtils;
-import com.pengfei.fastopen.entity.AppBean;
 
 import java.io.File;
 import java.util.List;
@@ -37,7 +41,15 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
         ImageView top = (ImageView) holder.getView(R.id.iv_top);
         top.setVisibility(bean.isTop() ? View.VISIBLE : View.INVISIBLE);
         appIcon.setImageDrawable(bean.getAppIcon());
-        appName.setText(bean.getAppName());
+        if (bean.isNewInstall()) {
+            appName.setText(getShowItemSpannable(bean.getAppName(), " (最近安装)"));
+        } else {
+            if (bean.isNewUpdate()) {
+                appName.setText(getShowItemSpannable(bean.getAppName(), " (最近更新)"));
+            } else {
+                appName.setText(bean.getAppName());
+            }
+        }
         appPackage.setText(bean.getPackageName());
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +97,17 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
         });
     }
 
+    private CharSequence getShowItemSpannable(String appName, String s) {
+        SpannableString showStr = new SpannableString(appName + s);
+        showStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.colorAccent)),
+                appName.length(), appName.length() + s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        showStr.setSpan(new RelativeSizeSpan(0.7f),
+                appName.length(), appName.length() + s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return showStr;
+
+    }
+
+    //初始化menu中的item是否可见
     private void initMenuVisible(Menu menu, AppBean bean) {
         if (bean.getStartIntent() == null) {
             menu.findItem(R.id.menu_open_app).setVisible(false);
@@ -94,7 +117,7 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
             menu.findItem(R.id.menu_share).setVisible(false);
             menu.findItem(R.id.menu_out).setVisible(false);
         }
-        if (bean.isSystem()) {
+        if (!bean.isCanUninstall()) {//不能被卸载
             menu.findItem(R.id.menu_uninstall).setVisible(false);
         }
         if (bean.isTop()) {
@@ -104,6 +127,7 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
         }
     }
 
+    //导出App
     private void doOutApp(AppBean bean) {
         ((MainActivity) mContext).showProDialog(0, null, "正在导出...");
         Thread outThread = new CopyAppToLocalThread(bean, new CopyAppToLocalThread.CallBack() {
@@ -114,7 +138,7 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
                     public void run() {
                         ((MainActivity) mContext).hintProDialog();
                         if (isCreated) {
-                            ((MainActivity) mContext).showToast("文件创建成功");
+                            ((MainActivity) mContext).showToast("APP导出成功");
                         } else {
                             ((MainActivity) mContext).showToast(errorMessage);
                         }

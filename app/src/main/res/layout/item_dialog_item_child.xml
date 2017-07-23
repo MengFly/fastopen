@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--Dialog里面选项的子item-->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tv_app_child"
+    android:id="@+id/tv_item_child"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#EEEE"
+    android:layout_gravity="center"
+    android:background="?selectableItemBackground"
     android:drawableLeft="@drawable/ic_point"
     android:drawablePadding="10dp"
     android:drawableStart="@drawable/ic_point"
-    android:paddingBottom="5dp"
-    android:paddingLeft="20dp"
-    android:paddingTop="5dp"
+    android:padding="10dp"
+    android:paddingLeft="40dp"
     android:textSize="12sp">
 
 </TextView>
