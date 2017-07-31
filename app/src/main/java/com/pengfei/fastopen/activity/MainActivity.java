@@ -1,6 +1,7 @@
 package com.pengfei.fastopen.activity;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import com.pengfei.fastopen.entity.AppBean;
 import com.pengfei.fastopen.thread.GetAppThread;
 import com.pengfei.fastopen.utils.AppManager;
 import com.pengfei.fastopen.utils.ClipbordUtils;
-import com.pengfei.fastopen.utils.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,17 +51,18 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        initView();
+        initDatas();
+        initListener();
+        setPress2Exit(true);
+        showProDialog("正在加载App，请稍后...");
+    }
+
+    private void initView() {
         setContentView(R.layout.act_main);
         totalAppsLV = (ListView) findViewById(R.id.lv_apps);
         searchView = (SearchView) findViewById(R.id.sv_);
         appStyle = (AppCompatSpinner) findViewById(R.id.as_app_style);
-        initListView();
-        setPress2Exit(true);
-        initDatas();
-        initListener();
-    }
-
-    private void initListView() {
         appCount = (TextView) getLayoutInflater().inflate(R.layout.item_bottom, null, false);
         headView = getLayoutInflater().inflate(R.layout.top_header, null, false);
         totalAppsLV.addHeaderView(headView);
@@ -85,6 +86,7 @@ public class MainActivity extends BaseActivity implements
         GetAppThread thread = new GetAppThread(new GetAppThread.CallBack() {
             @Override
             public void onCallback(List<AppBean> beanList) {
+                stopProDialog();
                 addAppList(beanList);
             }
         });
@@ -98,8 +100,7 @@ public class MainActivity extends BaseActivity implements
                 @Override
                 public void run() {
                     totalApps.addAll(beanList);
-                    refreshAppList(beanList, false);
-                    appCount.setText("App个数 ： " + String.valueOf(showApps.size()) + "个");
+                    refreshAppList(beanList);
                 }
             });
         }
@@ -109,26 +110,11 @@ public class MainActivity extends BaseActivity implements
         if (searchView.getAlpha() == 1.0f) {
             ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "alpha", 1.0f, 0.0f);
             animation.setInterpolator(new AccelerateInterpolator());
-            animation.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
+            animation.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     searchView.setVisibility(View.INVISIBLE);
                     headView.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
                 }
             });
             animation.setDuration(1000);
@@ -140,26 +126,11 @@ public class MainActivity extends BaseActivity implements
         if (searchView.getAlpha() == 0.0f) {
             ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "alpha", 0.0f, 1.0f);
             animation.setDuration(1000);
-            animation.addListener(new Animator.AnimatorListener() {
+            animation.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     searchView.setVisibility(View.VISIBLE);
                     headView.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
                 }
             });
             animation.setInterpolator(new AccelerateInterpolator());
@@ -168,10 +139,8 @@ public class MainActivity extends BaseActivity implements
     }
 
     //刷新显示的App
-    private void refreshAppList(List<AppBean> beanList, boolean isClear) {
-        if (isClear) {
-            showApps.clear();
-        }
+    private void refreshAppList(List<AppBean> beanList) {
+        showApps.clear();
         for (AppBean bean : beanList) {
             if (appStyle.getSelectedItemPosition() == 1 && bean.isSystem()) {
                 //系统应用
@@ -190,14 +159,7 @@ public class MainActivity extends BaseActivity implements
                 showApps.add(bean);
             }
         }
-        sortApps();
-        appCount.setText("App个数 ： " + String.valueOf(showApps.size()) + "个");
-    }
-
-    // 设置要显示的App列表
-    private void setApps(List<AppBean> apps) {
-        showApps.clear();
-        showApps.addAll(apps);
+        appAdapter.notifyDataSetChanged();
         sortApps();
         appCount.setText("App个数 ： " + String.valueOf(showApps.size()) + "个");
     }
@@ -239,7 +201,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position <= 4) {
-            refreshAppList(totalApps, true);
+            refreshAppList(totalApps);
         } else {
             //应用设置
             if (position == 5) {
@@ -278,9 +240,9 @@ public class MainActivity extends BaseActivity implements
     public boolean onQueryTextChange(String newText) {
         String filterStr = newText.trim();
         if (TextUtils.isEmpty(filterStr)) {
-            refreshAppList(totalApps, true);
+            refreshAppList(totalApps);
         } else {
-            setApps(AppManager.getFilterApps(filterStr, totalApps));
+            refreshAppList(AppManager.getFilterApps(filterStr, totalApps));
         }
         return true;
     }

@@ -117,7 +117,11 @@ public class AppManager {
     public static List<AppBean> getFilterApps(String filterStr, List<AppBean> totalApps) {
         List<AppBean> filterApps = new ArrayList<>();
         for (AppBean appBean : totalApps) {
-            if (appBean.getAppName().toUpperCase().contains(filterStr.toUpperCase())) {
+            if (appBean.getAppName().toLowerCase().
+                    contains(filterStr.toLowerCase())
+                    ||
+                    ChineseSpelling.getInstance().getSelling(appBean.getAppName()).toLowerCase().
+                            contains(filterStr.toLowerCase())) {
                 filterApps.add(appBean);
             }
         }

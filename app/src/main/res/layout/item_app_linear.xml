@@ -12,17 +12,12 @@
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:descendantFocusability="blocksDescendants"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:orientation="horizontal">
         <!--App的icon-->
         <ImageView
             android:id="@+id/iv_app_icon"
             style="@style/ivAppIcon"
             android:layout_gravity="center_vertical" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <!--App的应用名称以及包名-->
         <LinearLayout
@@ -39,32 +34,9 @@
             <TextView
                 android:id="@+id/tv_app_package"
                 style="@style/tvAppPackage" />
+
+            <include layout="@layout/layout_app_state" />
         </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="5dp">
-
-            <ImageView
-                android:id="@+id/iv_top"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:scaleType="center"
-                android:src="@drawable/ic_top" />
-
-            <ImageButton
-                android:id="@+id/ib_item_menu"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:background="?selectableItemBackground"
-                android:contentDescription="@string/content_menu"
-                android:focusable="false"
-                android:src="@drawable/ic_item_menu" />
-        </FrameLayout>
 
 
     </LinearLayout>

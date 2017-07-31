@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><!--App的状态-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="32dp"
+    android:orientation="horizontal"
+    android:paddingTop="5dp">
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <TextView
+                android:id="@+id/tv_running"
+                style="@style/tvAppState"
+                android:text="正在运行" />
+
+            <TextView
+                android:id="@+id/tv_new_install"
+                style="@style/tvAppState"
+                android:text="最近安装" />
+
+            <TextView
+                android:id="@+id/tv_new_update"
+                style="@style/tvAppState"
+                android:text="最近更新" />
+            <TextView
+                android:id="@+id/tv_top"
+                style="@style/tvAppState"
+                android:text="置顶" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ImageButton
+        android:id="@+id/ib_item_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="?selectableItemBackground"
+        android:contentDescription="@string/content_menu"
+        android:focusable="false"
+        android:padding="5dp"
+        android:src="@drawable/ic_item_menu" />
+</LinearLayout>

@@ -23,22 +23,15 @@ public class GetAppThread extends Thread {
     public void run() {
         List<PackageInfo> packages = AppManager.getPackages();
         //每当获取到5个应用的时候进行一次回调
-        int count = 5;
-        List<AppBean> temp = new ArrayList<>(5);
+        List<AppBean> appBeanList = new ArrayList<>(5);
         for (PackageInfo aPackage : packages) {
             AppBean bean = AppManager.getAppBean(aPackage);
             if (bean != null) {
-                temp.add(bean);
-            }
-            count --;
-            if (count <= 0) {
-                callBack.onCallback(new ArrayList<>(temp));
-                temp.clear();
-                count = 5;
+                appBeanList.add(bean);
             }
         }
         //如果temp里面还有剩余的app，则返回
-        callBack.onCallback(new ArrayList<>(temp));
+        callBack.onCallback(appBeanList);
 
     }
 

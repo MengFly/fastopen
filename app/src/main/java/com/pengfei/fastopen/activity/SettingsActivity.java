@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import com.pengfei.fastopen.Constant;
 import com.pengfei.fastopen.R;
 import com.pengfei.fastopen.adapter.SettingAdapter;
 import com.pengfei.fastopen.db.SaveAppDBManager;
@@ -45,14 +46,16 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 SettingAdapter.SettingItem item = settingLists.get(groupPosition);
-                if (item.itemName.equals("评价应用")) {
-                    IntentUtils.openApplicationMarket(mContext, getPackageName());
-                    return true;
-                } else if (item.itemName.equals("查看应用源代码")) {
-                    IntentUtils.openBrowser(mContext, "https://github.com/mengfly/fastopem");
-                    return true;
-                } else {
-                    return false;
+                switch (item.itemName) {
+                    case "评价应用":
+                        IntentUtils.openApplicationMarket(mContext, getPackageName());
+                        return true;
+                    case "查看应用源代码":
+                        IntentUtils.openBrowser(mContext, Constant.SOURCE);
+                        return true;
+                    default:
+                        return false;
+
                 }
             }
         });
@@ -61,11 +64,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     private void initData() {
         settingLists = new ArrayList<>();
-        SettingAdapter.SettingItem extraApks = new SettingAdapter.SettingItem<>("查看导出的安装包", R.drawable.ic_extra_doc, getExtraList(), true);
-        SettingAdapter.SettingItem unInstallApp = new SettingAdapter.SettingItem<>("查看已卸载的App", R.drawable.ic_uninstall, SaveAppDBManager.getUnInstallApp(), true);
-        SettingAdapter.SettingItem evaluate = new SettingAdapter.SettingItem<>("评价应用", R.drawable.ic_evaluate, Collections.emptyList(), false);
-        SettingAdapter.SettingItem seeSource = new SettingAdapter.SettingItem<>("查看应用源代码", R.drawable.ic_source, Collections.emptyList(), false);
-        SettingAdapter.SettingItem license = new SettingAdapter.SettingItem<>("Lisence", R.drawable.ic_license, getLicenseList(), true);
+        SettingAdapter.SettingItem extraApks = new SettingAdapter.SettingItem<>(getString(R.string.see_extra_apk), R.drawable.ic_extra_doc, getExtraList(), true);
+        SettingAdapter.SettingItem unInstallApp = new SettingAdapter.SettingItem<>(getString(R.string.see_uninstall_app), R.drawable.ic_uninstall, SaveAppDBManager.getUnInstallApp(), true);
+        SettingAdapter.SettingItem evaluate = new SettingAdapter.SettingItem<>(getString(R.string.evaluate_app), R.drawable.ic_evaluate, Collections.emptyList(), false);
+        SettingAdapter.SettingItem seeSource = new SettingAdapter.SettingItem<>(getString(R.string.see_source), R.drawable.ic_source, Collections.emptyList(), false);
+        SettingAdapter.SettingItem license = new SettingAdapter.SettingItem<>(getString(R.string.license), R.drawable.ic_license, getLicenseList(), true);
         settingLists.add(extraApks);
         settingLists.add(unInstallApp);
         settingLists.add(license);
@@ -88,7 +91,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     public List<LicenseEntity> getLicenseList() {
         List<LicenseEntity> licenses = new ArrayList<>();
-        licenses.add(new LicenseEntity("LitePal for Android", "LitePal is an open source Android library that allows developers to use SQLite database extremely easy. You can finish most of the database operations without writing even a SQL statement, including create or upgrade tables, crud operations, aggregate functions, etc. The setup of LitePal is quite simple as well, you can integrate it into your project in less than 5 minutes.", "https://github.com/LitePalFramework/LitePal"));
+        licenses.add(new LicenseEntity("LitePal for Android", getString(R.string.linceseLitePal), "https://github.com/LitePalFramework/LitePal"));
         return licenses;
     }
 }

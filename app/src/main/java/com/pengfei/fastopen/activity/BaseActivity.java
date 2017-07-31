@@ -4,11 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.widget.Toast;
-
-import com.pengfei.fastopen.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -103,19 +100,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 显示一个提示等待框
-     *
-     * @param logoRes 等待框要显示的logo，如果为0那么就不显示
      */
-    public void showProDialog(int logoRes, String title, String message) {
+    public void showProDialog(String message) {
         if (mPro == null) {
-            mPro = ProgressDialog.show(mContext, title, message);
+            mPro = new ProgressDialog(mContext);
             mPro.setCancelable(true);
-        }
-        if (logoRes != 0) {
-            mPro.setIcon(logoRes);
-        }
-        if (title != null) {
-            mPro.setTitle(title);
         }
         if (message != null) {
             mPro.setMessage(message);
@@ -128,7 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 隐藏显示的ProDialog
      */
-    public void hintProDialog() {
+    public void stopProDialog() {
         if (mPro != null && mPro.isShowing() && !isFinishing()) {
             mPro.dismiss();
         }

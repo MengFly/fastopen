@@ -1,8 +1,11 @@
 package com.pengfei.fastopen.entity;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
@@ -17,9 +20,7 @@ public class AppBean implements Comparable<AppBean> {
     private static final String TOP_SP = "top_sp";
 
     private PackageInfo appInfo;
-    //    private int useCount;//(使用频率，使用次数)
     private String appName;//（应用的名称）
-    //    private Date lastOpenTime;// （上次打开时间）
     private Drawable appIcon;//（App的Icon）
     private Intent startIntent;//获取启动的intent
     private Date firstInstallTime;//第一次安装时间
@@ -38,6 +39,19 @@ public class AppBean implements Comparable<AppBean> {
 
     public Drawable getAppIcon() {
         return appIcon;
+    }
+
+    //应用是否正在运行
+    public boolean isRunning() {
+        ActivityManager am = com.pengfei.fastopen.utils.ActivityManager.getActivityManager();
+        List<ActivityManager.RunningTaskInfo> infos = am.getRunningTasks(100);
+        for (ActivityManager.RunningTaskInfo info : infos) {
+            if(getPackageName().equals(info.baseActivity.getPackageName()) ||
+                    getPackageName().equals(info.topActivity.getPackageName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

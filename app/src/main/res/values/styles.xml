@@ -5,6 +5,8 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <style name="ivAppIcon">
@@ -18,7 +20,8 @@
     <style name="tvAppName">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">5dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
         <item name="android:text">@string/app_name_default</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorTextMain</item>
@@ -28,9 +31,23 @@
     <style name="tvAppPackage">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">5dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingLeft">5dp</item>
         <item name="android:text">@string/package_default</item>
         <item name="android:textColor">@color/colorTextSecond</item>
+    </style>
+
+    <style name="tvAppState">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">3dp</item>
+        <!--<item name="android:visibility">gone</item>-->
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/label_red</item>
     </style>
 
     <style name="itemTextView">

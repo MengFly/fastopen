@@ -2,10 +2,6 @@ package com.pengfei.fastopen.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,18 +34,12 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
         TextView appName = (TextView) holder.getView(R.id.tv_app_name);
         TextView appPackage = (TextView) holder.getView(R.id.tv_app_package);
         ImageButton menu = (ImageButton) holder.getView(R.id.ib_item_menu);
-        ImageView top = (ImageView) holder.getView(R.id.iv_top);
-        top.setVisibility(bean.isTop() ? View.VISIBLE : View.INVISIBLE);
+        holder.getView(R.id.tv_top).setVisibility(bean.isTop() ? View.VISIBLE : View.GONE);
         appIcon.setImageDrawable(bean.getAppIcon());
-        if (bean.isNewInstall()) {
-            appName.setText(getShowItemSpannable(bean.getAppName(), " (最近安装)"));
-        } else {
-            if (bean.isNewUpdate()) {
-                appName.setText(getShowItemSpannable(bean.getAppName(), " (最近更新)"));
-            } else {
-                appName.setText(bean.getAppName());
-            }
-        }
+        appName.setText(bean.getAppName());
+        holder.getView(R.id.tv_new_install).setVisibility(bean.isNewInstall() ? View.VISIBLE : View.GONE);
+        holder.getView(R.id.tv_new_update).setVisibility(bean.isNewUpdate() ? View.VISIBLE : View.GONE);
+        holder.getView(R.id.tv_running).setVisibility(bean.isRunning() ? View.VISIBLE : View.GONE);
         appPackage.setText(bean.getPackageName());
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,17 +86,6 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
             }
         });
     }
-
-    private CharSequence getShowItemSpannable(String appName, String s) {
-        SpannableString showStr = new SpannableString(appName + s);
-        showStr.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.colorAccent)),
-                appName.length(), appName.length() + s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        showStr.setSpan(new RelativeSizeSpan(0.7f),
-                appName.length(), appName.length() + s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return showStr;
-
-    }
-
     //初始化menu中的item是否可见
     private void initMenuVisible(Menu menu, AppBean bean) {
         if (bean.getStartIntent() == null) {
@@ -129,14 +108,14 @@ public class AppsAdapter extends CommonAdapter<AppBean> {
 
     //导出App
     private void doOutApp(AppBean bean) {
-        ((MainActivity) mContext).showProDialog(0, null, "正在导出...");
+        ((MainActivity) mContext).showProDialog("正在导出...");
         Thread outThread = new CopyAppToLocalThread(bean, new CopyAppToLocalThread.CallBack() {
             @Override
             public void onCallBack(final boolean isCreated, File targetFile, final String errorMessage) {
                 ((MainActivity) mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((MainActivity) mContext).hintProDialog();
+                        ((MainActivity) mContext).stopProDialog();
                         if (isCreated) {
                             ((MainActivity) mContext).showToast("APP导出成功");
                         } else {
