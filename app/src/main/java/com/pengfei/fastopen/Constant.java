@@ -9,6 +9,9 @@ public class Constant {
     //================URL=======================
     public static final String SOURCE = "https://github.com/mengfly/fastopen";
 
+    // license
+    public static final String LITELPAL = "https://github.com/LitePalFramework/LitePal";
+
 
 
 }

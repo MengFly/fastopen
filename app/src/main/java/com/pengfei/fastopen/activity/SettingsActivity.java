@@ -91,7 +91,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     public List<LicenseEntity> getLicenseList() {
         List<LicenseEntity> licenses = new ArrayList<>();
-        licenses.add(new LicenseEntity("LitePal for Android", getString(R.string.linceseLitePal), "https://github.com/LitePalFramework/LitePal"));
+        licenses.add(new LicenseEntity("LitePal for Android", getString(R.string.linceseLitePal), Constant.LITELPAL));
         return licenses;
     }
 }
